@@ -7,18 +7,18 @@ namespace MipequeniaTienda.Models
     {
         [Key]
         public int DireccionId { get; set; }
-        [Required]
+        [Required(ErrorMessage = "El campo Address es obligatorio")]
         [StringLength(50)]
         public string Address { get; set; } = null!;
-        [Required]
+        [Required(ErrorMessage = "El campo Ciudad es obligatorio")]
         [StringLength(20)]
         public string Ciudad { get; set; } = null!;
-        [Required]
+        [Required(ErrorMessage = "El campo Estado es obligatorio")]
         [StringLength(20)]
         public string Estado { get; set; } = null!;
-        [Required]
+        [Required(ErrorMessage = "El campo CodigoPostal es obligatorio")]
         public string CodigoPostal { get; set; } = null!;
-        [Required]
+        [Required(ErrorMessage = "El campo es obligatorio")]
         public int UsuarioId { get; set; }
         [ForeignKey("UsuarioId")]
         public Usuario Usuario { get; set; }=null!;

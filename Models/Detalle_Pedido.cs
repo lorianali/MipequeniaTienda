@@ -7,17 +7,17 @@ namespace MipequeniaTienda.Models
     {
         [Key]
         public int DetallePedido { get; set; }
-        [Required]
+        [Required(ErrorMessage = "El campo es obligatorio")]
         public int PedidoId { get; set; }
         [ForeignKey("PedidoId")]
         public Pedido Pedido { get; set; } = null!;
-        [Required]
+        [Required(ErrorMessage = "El campo es obligatorio")]
         public int ProductoId {  get; set; }
         [ForeignKey("ProductoId")]
         public Producto Producto { get; set; } = null!;
-        [Required]
+        [Required(ErrorMessage = "El campo Cantidad es obligatorio")]
         public int Cantidad { get; set; }
-        [Required]
+        [Required(ErrorMessage = "El campo Precio es obligatorio")]
         public decimal Precio { get; set; }
 
     }

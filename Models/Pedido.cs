@@ -11,9 +11,9 @@ namespace MipequeniaTienda.Models
         public int UsuarioId { get; set; }
         [ForeignKey("UsuarioId")]
         public Usuario Usuario { get; set; } = null!;
-        [Required]
+        [Required(ErrorMessage = "El campo Fecha es obligatorio")]
         public DateTime Fecha { get; set; }
-        [Required]
+        [Required(ErrorMessage = "El campo Estado es obligatorio")]
         public string Estado { get; set; } = null!;
         public int DireccionIdSeleccionada { get; set; }       
         public Direccion Direccion { get; set; } = null!;
