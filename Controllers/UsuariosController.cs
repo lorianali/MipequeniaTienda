@@ -57,10 +57,31 @@ namespace MipequeniaTienda.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("UsuarioId,Nombre,Telefono,NombreUsuario,Contrasenia,Correo,Direccion,Ciudad,Estado,CodigoPostal,RolId")] Usuario usuario)
+        public async Task<IActionResult> Create(
+            [Bind("UsuarioId,Nombre,Telefono,NombreUsuario,Contrasenia,Correo,Direccion,Ciudad,Estado,CodigoPostal,RolId"
+            )] 
+                Usuario usuario)
         {
+            var rol = await _context.Roles
+                .Where(d => d.RolId == usuario.RolId)
+                .FirstOrDefaultAsync();
+            if (rol != null)
+            {
+                usuario.Rol = rol;
+            
             if (ModelState.IsValid)
             {
+                usuario.Direcciones = new List<Direccion>
+                {
+                    new Direccion
+                    {
+                        Address=usuario.Direccion,
+                        Ciudad=usuario.Ciudad,
+                        Estado=usuario.Estado,
+                        CodigoPostal=usuario.CodigoPostal
+                    }
+                };}
+
                 _context.Add(usuario);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -98,11 +119,60 @@ namespace MipequeniaTienda.Controllers
                 return NotFound();
             }
 
+            var rol = await _context.Roles
+                .Where(d => d.RolId == usuario.RolId)
+                .FirstOrDefaultAsync();
+
+            if (rol == null)
+            {
+                // Si no se encuentra el rol, mostramos un error y retornamos la vista
+                ModelState.AddModelError("RolId", "El rol especificado no es válido.");
+                ViewData["RolId"] = new SelectList(_context.Roles, "RolId", "Nombre", usuario.RolId);
+                return View(usuario);
+            }
+
+            // Si el rol se encuentra, lo asignamos
+            usuario.Rol = rol;
+
+            // Buscamos el usuario existente
+            var existingUser = await _context.Usuarios
+                .Include(u => u.Direcciones)
+                .FirstOrDefaultAsync(u => u.UsuarioId == id);
+
+            if (existingUser == null)
+            {
+                return NotFound();
+            }
+
+            // Actualizamos las direcciones
+            if (existingUser.Direcciones.Count > 0)
+            {
+                var direccion = existingUser.Direcciones.First();
+                direccion.Address = usuario.Direccion;
+                direccion.Ciudad = usuario.Ciudad;
+                direccion.Estado = usuario.Estado;
+                direccion.CodigoPostal = usuario.CodigoPostal;
+            }
+            else
+            {
+                existingUser.Direcciones = new List<Direccion>
+        {
+            new Direccion
+            {
+                Address = usuario.Direccion,
+                Ciudad = usuario.Ciudad,
+                Estado = usuario.Estado,
+                CodigoPostal = usuario.CodigoPostal
+            }
+        };
+            }
+
+            
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(usuario);
+                    _context.Update(existingUser);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -118,9 +188,12 @@ namespace MipequeniaTienda.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
+            // Asignamos la lista de roles para el dropdown en la vista
             ViewData["RolId"] = new SelectList(_context.Roles, "RolId", "Nombre", usuario.RolId);
             return View(usuario);
         }
+
 
         // GET: Usuarios/Delete/5
         public async Task<IActionResult> Delete(int? id)
