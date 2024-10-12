@@ -17,7 +17,7 @@ namespace MipequeniaTienda.Models
         [StringLength(255)]
         public string Modelo { get; set; } = null!;
         [Required]
-        [StringLength(100)]
+        [StringLength(1000)]
         public string Descripcion { get; set; } = null!;
         [Required]
         public decimal Precio { get; set; } 
