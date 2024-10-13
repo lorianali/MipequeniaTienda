@@ -20,3 +20,27 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.video-container {
+    position:relative;
+    width:100%;
+    padding-top:56.25%;
+    overflow:hidden;
+}
+.video-iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+
+
+footer {
+    margin-top: 20px; /* o más si es necesario */
+    padding: 10px; /* ajusta según sea necesario */
+    position: relative; /* o absolute según tu diseño */
+    z-index: 1; /* para asegurarte de que esté sobre otros elementos */
+}
+

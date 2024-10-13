@@ -1,41 +1,49 @@
 @model IEnumerable<MipequeniaTienda.Models.Categoria>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Categorías";
 }
 
-<h1>Index</h1>
+<div class="container mt-5">
+    <h1 class="mb-4 text-center">@ViewData["Title"]</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nombre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Descripcion)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Descripcion)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.CategoriaId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.CategoriaId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CategoriaId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <div class="d-flex justify-content-end mb-3">
+        <a asp-action="Create" class="btn btn-success">
+            <i class="fas fa-plus"></i> Crear Nueva Categoría
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover table-striped text-center">
+            <thead class="thead-dark">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.Nombre)</th>
+                    <th>@Html.DisplayNameFor(model => model.Descripcion)</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Descripcion)</td>
+                        <td>
+                            <div class="d-grid gap-2">
+                                <a asp-action="Edit" asp-route-id="@item.CategoriaId" class="btn btn-warning btn-sm w-100">
+                                    <i class="fas fa-edit"></i> Editar
+                                </a>
+                                <a asp-action="Details" asp-route-id="@item.CategoriaId" class="btn btn-info btn-sm w-100">
+                                    <i class="fas fa-info-circle"></i> Detalles
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.CategoriaId" class="btn btn-danger btn-sm w-100">
+                                    <i class="fas fa-trash-alt"></i> Eliminar
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

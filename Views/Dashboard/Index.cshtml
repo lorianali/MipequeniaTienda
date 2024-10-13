@@ -1,28 +1,83 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Dashboard";
 }
 
-<div class="container mt-4">
-    <h1 class="mb-4">Bienvenido al Dashboard</h1>
-    <p class="lead">Aquí encontrarás enlaces a los índices de los demás controladores:</p>
-
-    <div class="list-group">
-      @*   ENLACES A LOS INDICES DE LOS DEMAS CONTROLADRES *@
-      <a href="@Url.Action("Index","Usuarios")"
-      class="list-group-item list-group-item-action">Usuarios</a>
-      <a href="@Url.Action("Index","Roles")" 
-      class="list-group-item list-group-item-action">Roles</a>
-      <a href="@Url.Action("Index","Productos")"
-      class="list-group-item list-group-item-action">Productos</a>
-        <a href="@Url.Action("Index","Pedidos")"
-           class="list-group-item list-group-item-action">Pedidos</a>
-        <a href="@Url.Action("Index","Direcciones")"
-           class="list-group-item list-group-item-action">Direcciones</a>
-        <a href="@Url.Action("Index","DetallesPedidos")"
-           class="list-group-item list-group-item-action">DetallesPedidos</a>
-        <a href="@Url.Action("Index","Categorias")"
-           class="list-group-item list-group-item-action">Categorias</a>
+<div class="container mt-5">
+    <div class="text-center">
+        <h1 class="display-4 mb-3">Bienvenido al Panel de Control</h1>
+        <p class="lead">Administra de manera eficiente toda la información clave desde este panel centralizado.</p>
     </div>
 
+    <div class="row mt-4">
+        @* ENLACES A LOS INDICES DE LOS DEMAS CONTROLADORES *@
+        <div class="col-md-4 mb-3">
+            <div class="card text-center h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Usuarios</h5>
+                    <p class="card-text">Gestión completa de usuarios.</p>
+                    <a href="@Url.Action("Index", "Usuarios")" class="btn btn-primary">Ir a Usuarios</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card text-center h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Roles</h5>
+                    <p class="card-text">Administración de roles y permisos.</p>
+                    <a href="@Url.Action("Index", "Roles")" class="btn btn-primary">Ir a Roles</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card text-center h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Productos</h5>
+                    <p class="card-text">Gestión de inventario y productos.</p>
+                    <a href="@Url.Action("Index", "Productos")" class="btn btn-primary">Ir a Productos</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card text-center h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Pedidos</h5>
+                    <p class="card-text">Control y gestión de pedidos.</p>
+                    <a href="@Url.Action("Index", "Pedidos")" class="btn btn-primary">Ir a Pedidos</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card text-center h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Direcciones</h5>
+                    <p class="card-text">Administración de direcciones de clientes.</p>
+                    <a href="@Url.Action("Index", "Direcciones")" class="btn btn-primary">Ir a Direcciones</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card text-center h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Detalles de Pedidos</h5>
+                    <p class="card-text">Información detallada de pedidos realizados.</p>
+                    <a href="@Url.Action("Index", "DetallesPedidos")" class="btn btn-primary">Ir a Detalles de Pedidos</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 mb-3">
+            <div class="card text-center h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Categorías</h5>
+                    <p class="card-text">Clasificación de productos por categorías.</p>
+                    <a href="@Url.Action("Index", "Categorias")" class="btn btn-primary">Ir a Categorías</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

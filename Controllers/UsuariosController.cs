@@ -10,13 +10,12 @@ using MipequeniaTienda.Models;
 
 namespace MipequeniaTienda.Controllers
 {
-    public class UsuariosController : Controller
-    {
-        private readonly ApplicationDbContext _context;
+    public class UsuariosController : BaseController
 
-        public UsuariosController(ApplicationDbContext context)
+    {
+
+        public UsuariosController(ApplicationDbContext context):base(context)
         {
-            _context = context;
         }
 
         // GET: Usuarios

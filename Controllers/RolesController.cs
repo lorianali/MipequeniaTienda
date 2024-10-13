@@ -10,14 +10,12 @@ using MipequeniaTienda.Models;
 
 namespace MipequeniaTienda.Controllers
 {
-    public class RolesController : Controller
+    public class RolesController : BaseController
     {
-        private readonly ApplicationDbContext _context;
 
-        public RolesController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+
+        public RolesController(ApplicationDbContext context):base(context)
+        { }
 
         // GET: Roles
         public async Task<IActionResult> Index()

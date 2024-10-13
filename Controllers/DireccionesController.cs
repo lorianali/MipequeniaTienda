@@ -10,14 +10,10 @@ using MipequeniaTienda.Models;
 
 namespace MipequeniaTienda.Controllers
 {
-    public class DireccionesController : Controller
+    public class DireccionesController : BaseController
     {
-        private readonly ApplicationDbContext _context;
-
-        public DireccionesController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+          public DireccionesController(ApplicationDbContext context):base(context)
+        {}
 
         // GET: Direcciones
         public async Task<IActionResult> Index()
