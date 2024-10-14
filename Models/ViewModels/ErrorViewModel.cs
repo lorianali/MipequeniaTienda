@@ -1,4 +1,6 @@
-namespace MipequeniaTienda.Models
+using MipequeniaTienda.Models.ViewModels;
+
+namespace MipequeniaTienda.Models.ViewModels
 {
     public class ErrorViewModel
     {

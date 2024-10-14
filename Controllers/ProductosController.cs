@@ -12,8 +12,7 @@ namespace MipequeniaTienda.Controllers
 {
     public class ProductosController : BaseController
     {
-        private readonly ApplicationDbContext _context;
-
+        
         public ProductosController(ApplicationDbContext context):base(context)
         {     }
 

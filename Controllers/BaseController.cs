@@ -1,11 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MipequeniaTienda.Data;
 using MipequeniaTienda.Models;
+using MipequeniaTienda.Models.ViewModels;
 using Newtonsoft.Json;
+using System.Data.Common;
+using System.Diagnostics;
 
 namespace MipequeniaTienda.Controllers
 {
-    public class BaseController : Controller
+    public class BaseController : Controller //para agregar todas las funciones que necesita
     {
 
         public readonly ApplicationDbContext _context;
@@ -14,8 +18,8 @@ namespace MipequeniaTienda.Controllers
         {
             _context = context;
         }
-        //para agregar todas las funciones que necesita
-        public override ViewResult View(string? viewName, object? model)
+        
+        public override ViewResult View(string? viewName, object? model) //aqui viewName y model
         {
             @ViewBag.NumeroProductos = GetCarritoCount();
             return base.View(viewName, model);
@@ -37,5 +41,35 @@ namespace MipequeniaTienda.Controllers
             }
             return count;
         }
+        protected IActionResult HandleError(Exception e)
+        {
+
+            return View(
+                "Error", new ErrorViewModel
+                {
+                    RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+                });
+        }
+        protected IActionResult HandleDbError(DbException dbException)
+        {
+            var ViewModel = new DbErrorViewModel
+            {
+                ErrorMessage = "Error de base de datos",
+                Details = dbException.Message
+            };
+            return View("dbError", ViewModel);
+        }
+        protected IActionResult HandleDbUpdateError(DbUpdateException dbUpdateException)
+        {
+            var ViewModel = new DbErrorViewModel
+            {
+                ErrorMessage = "Error de actualización de base de datos",
+                Details = dbUpdateException.Message
+            };
+            return View("dbError", ViewModel);
+        }
+
     }
+
 }
+

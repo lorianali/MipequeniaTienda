@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MipequeniaTienda.Data;
 using MipequeniaTienda.Models;
+using MipequeniaTienda.Models.ViewModels;
 using System.Diagnostics;
 
 namespace MipequeniaTienda.Controllers
