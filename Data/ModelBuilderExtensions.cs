@@ -143,7 +143,7 @@ namespace MipequeniaTienda.Data
                     Modelo = "PATRICK-STAR-NS",
                     Descripcion = "THE PATRICK STAR GAME para Nintendo Switch es una divertida aventura basada en el querido personaje de Bob Esponja. Explora el mundo submarino y enfrenta retos divertidos en un juego lleno de humor y sorpresas.",
                     Precio = 39.90m,
-                    Imagen = "https://cdn.grupoelcorteingles.es/SGFM/dctm/MEDIA03/202305/21/00197580504103____1__1200x1200.jpg",
+                    Imagen = "https://cdn.grupoelcorteingles.es/SGFM/dctm/MEDIA03/202409/09/00197578531879____8__1200x1200.jpg",
                     CategoriaId = 3,
                     Stock = 350,
                     Marca = "Nintendo",

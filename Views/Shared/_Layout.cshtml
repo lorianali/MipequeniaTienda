@@ -20,18 +20,18 @@
         </main>
     </div>
 
-
-
-
     <footer class="footer mt-auto border-top bg-light text-center text-muted py-3">
-        <div class="container">  
+        <div class="container">
             &copy; 2024 - Game Over Hub - Todos los derechos reservados.
             <a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-muted">Privacy</a>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>  
+    <script src="~/js/breadcrumb.js" asp-append-version="true"></script>
+   
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

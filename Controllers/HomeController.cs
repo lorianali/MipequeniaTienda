@@ -14,7 +14,7 @@ namespace MipequeniaTienda.Controllers
         private readonly IProductoService _productoService;
         private readonly ICategoriaService _categoriaService;
 
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context,IProductoService productoService,ICategoriaService categoriaService):base(context)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context, IProductoService productoService, ICategoriaService categoriaService) : base(context)
         {
             _logger = logger;
             _productoService = productoService;
@@ -34,37 +34,45 @@ namespace MipequeniaTienda.Controllers
 
             //obtener detalleproductos de productoservice
         }
-        
+
         public IActionResult DetalleProducto(int id)
         {
-            var producto=_productoService.GetProducto(id);
-            if(producto==null)
+            var producto = _productoService.GetProducto(id);
+            if (producto == null)
             {
                 return NotFound();
             }
             return View(producto);
         }
 
-        public async Task<IActionResult> Productos(
-            int?categoriaId,string?busqueda,int pagina = 1)
+        public async Task<IActionResult> Productos(int? categoriaId, string? busqueda, int pagina = 1)
         {
             try
             {
                 int productosPorPagina = 9;
-                var model = await _productoService.GetProductosPaginados(categoriaId, busqueda, pagina, productosPorPagina);
+                var model = await _productoService.GetProductosPaginados(
+                    categoriaId,
+                    busqueda,
+                    pagina,
+                    productosPorPagina
+                );
 
-                ViewBag.Categorias=await _categoriaService.GetCategorias();
-                if (Request.Headers["X-Request-With"] == "XMLHttpRequest")
+                ViewBag.Categorias = await _categoriaService.GetCategorias();
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
                 {
                     return PartialView("_ProductosPartial", model);
                 }
+
                 return View(model);
             }
-            catch (Exception ex) { return HandleError(ex); }
+            catch (Exception e)
+            {
+                return HandleError(e);
+            }
         }
 
         public async Task<IActionResult> AgregarProducto(
-            int id, int cantidad,int?categoriaId, string? busqueda,int pagina=1)
+            int id, int cantidad, int? categoriaId, string? busqueda, int pagina = 1)
         {
             var carritoViewModel = await AgregarProductoAlCarrito(id, cantidad);
             if (carritoViewModel != null)
@@ -73,7 +81,7 @@ namespace MipequeniaTienda.Controllers
                     "Productos", new { id, categoriaId, busqueda, pagina }
                     );
             }
-            else 
+            else
                 return NotFound();
         }
         public async Task<IActionResult> AgregarProductoIndex(int id, int cantidad)
@@ -92,7 +100,7 @@ namespace MipequeniaTienda.Controllers
             var carritoViewModel = await AgregarProductoAlCarrito(id, cantidad);
             if (carritoViewModel != null)
             {
-                return RedirectToAction("DetalleProducto", new {id});
+                return RedirectToAction("DetalleProducto", new { id });
             }
             else
                 return NotFound();
