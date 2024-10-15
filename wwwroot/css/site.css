@@ -64,3 +64,13 @@ body {
     margin-bottom: 60px; /* Espacio adicional para el footer */
     overflow: visible; /* Asegúrate de que el contenido no esté cortado */
 }
+
+
+.nav-item i.fa-user-alt {
+    margin-right: 5px; /* Espacio entre el ícono y el nombre */
+}
+
+.nav-item .dropdown-toggle {
+    display: flex;
+    align-items: center; /* Alinea verticalmente el ícono con el texto */
+}

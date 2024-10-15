@@ -23,42 +23,61 @@
                 </form>
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" asp-controller="Carrito" asp-action="Index">
-                            <i class=" fas fa-shopping-cart"></i>
-                            <span class="btn btn-primary">
+                        <a class="nav-link" asp-controller="Carrito"
+                           asp-action="Index">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                            <span class="badge badge-pill badge-danger bg-primary">
                                 @ViewBag.NumeroProductos
                             </span>
                         </a>
                     </li>
-                    @if (User.Identity.IsAuthenticated)
+
+                    @if (User.Identity != null && User.Identity.IsAuthenticated)
                     {
                         string nombreUsuario = User.Identity.Name ?? "Desconocido";
-                        string idUsuario = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                        string idUsuario =
+                        User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+
 
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fa-solid fa-user-alt">@nombreUsuario</i>
+                            <a class="nav-link dropdown-toggle"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa-regular"> @nombreUsuario</i>
                             </a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a class="dropdown-item" asp-controller="Perfil" asp-action="Details" asp-route-id="@idUsuario">Perfil</a>
+                                    <a class="dropdown-item" asp-controller="Perfil"
+                                       asp-action="Details"
+                                       asp-route-id="@idUsuario">Perfil</a>
                                 </li>
-                                @if (User.IsInRole("Administrador"))
+
+                                @if (User.FindFirstValue(ClaimTypes.Role) == "Administrador")
                                 {
-                                    <li><a class="dropdown-item" asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Dashboard"
+                                           asp-action="Index">Dashboard</a>
+                                    </li>
+
                                 }
 
-                               
 
-                              <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" asp-controller="Account" asp-action="Logout" >Cerrar sesion</a></li>
-
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item"
+                                       asp-controller="Account" asp-action="Logout">
+                                        Cerrar
+                                        sesión
+                                    </a>
+                                </li>
                             </ul>
                         </li>
-                    }else
+                    }
+                    else
                     {
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Account" asp-action="Login">
+                            <a class="nav-link" asp-controller="Account"
+                               asp-action="Login">
                                 <i class="fa-regular fa-user"></i>
                             </a>
                         </li>
