@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MipequeniaTienda.Data;
 
@@ -11,9 +12,11 @@ using MipequeniaTienda.Data;
 namespace MipequeniaTienda.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241016101958_CrearTablaBanner")]
+    partial class CrearTablaBanner
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,23 +40,6 @@ namespace MipequeniaTienda.Migrations
                     b.HasKey("BannerId");
 
                     b.ToTable("Banners");
-
-                    b.HasData(
-                        new
-                        {
-                            BannerId = 1,
-                            ImageUrl = "https://img.freepik.com/free-vector/gradient-gaming-stream-twitch-banner_23-2149815080.jpg"
-                        },
-                        new
-                        {
-                            BannerId = 2,
-                            ImageUrl = "https://img.freepik.com/vector-gratis/banner-contraccion-configuracion-juego-neon-diseno-plano_23-2149833530.jpg"
-                        },
-                        new
-                        {
-                            BannerId = 3,
-                            ImageUrl = "https://img.freepik.com/vector-gratis/diseno-plantilla-banner-contraccion-juegos_23-2149843550.jpg"
-                        });
                 });
 
             modelBuilder.Entity("MipequeniaTienda.Models.Categoria", b =>

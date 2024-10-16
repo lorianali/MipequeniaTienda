@@ -24,7 +24,7 @@ namespace MipequeniaTienda.Controllers
         public async Task<IActionResult> Index()
         {//cargamos los productos activos
             ViewBag.Categorias = await _categoriaService.GetCategorias();
-
+            ViewBag.Banners = _context.Banners.ToList();
             try
             {
                 List<Producto> productosDestacados = await _productoService.GetProductosDestacados();

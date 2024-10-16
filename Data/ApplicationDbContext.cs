@@ -15,6 +15,7 @@ namespace MipequeniaTienda.Data
         public DbSet<Direccion> Direccions { get; set; } = null!;
         public DbSet<Detalle_Pedido> DetallePedidos { get; set; } = null!;
         public DbSet<Categoria> Categorias { get; set; } = null!;
+        public DbSet<Banner> Banners { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -22,25 +23,25 @@ namespace MipequeniaTienda.Data
             modelBuilder.Entity<Usuario>().HasMany(u => u.Pedidos)
                 .WithOne(p => p.Usuario)
                 .HasForeignKey(p => p.UsuarioId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Producto>()
                 .HasMany(p => p.DetallesPedido)
                 .WithOne(dp => dp.Producto)
                 .HasForeignKey(dp => dp.PedidoId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Producto>()
                .HasMany(p => p.DetallesPedido)
                .WithOne(dp => dp.Producto)
                .HasForeignKey(dp => dp.ProductoId)
-               .OnDelete(DeleteBehavior.Cascade);
+               .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Pedido>()
                .HasMany(u => u.DetallesPedido)
                .WithOne(dp => dp.Pedido)
                .HasForeignKey(dp => dp.PedidoId)
-               .OnDelete(DeleteBehavior.Cascade);
+               .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Pedido>()
                 .Ignore(p => p.Direccion);

@@ -7,6 +7,23 @@ namespace MipequeniaTienda.Data
     {
         public static void Seed(this ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Banner>().HasData(
+                new Banner
+                {
+                    BannerId = 1,
+                    ImageUrl = "https://img.freepik.com/free-vector/gradient-gaming-stream-twitch-banner_23-2149815080.jpg"
+                },
+                new Banner
+                {
+                    BannerId = 2,
+                    ImageUrl= "https://img.freepik.com/vector-gratis/banner-contraccion-configuracion-juego-neon-diseno-plano_23-2149833530.jpg"
+                },
+                new Banner
+                {
+                    BannerId=3,
+                    ImageUrl= "https://img.freepik.com/vector-gratis/diseno-plantilla-banner-contraccion-juegos_23-2149843550.jpg"
+                }
+                );
             // Semilla de datos para categorías
             modelBuilder.Entity<Categoria>().HasData(
                 new Categoria
