@@ -36,10 +36,12 @@ namespace MipequeniaTienda.Controllers
                 var carrito = JsonConvert.DeserializeObject<List<ProductoIdAndCantidad>>(carritoJson);
                 if (carrito != null)
                 {
-                    count = carrito.Count;
+                    // Suma las cantidades de cada producto en el carrito
+                    count = carrito.Sum(p => p.Cantidad);
                 }
             }
             return count;
+           
         }
 
         public async Task<CarritoViewModel> AgregarProductoAlCarrito(int productoId, int cantidad)
