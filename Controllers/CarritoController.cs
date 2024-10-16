@@ -6,6 +6,10 @@ using MipequeniaTienda.Models.ViewModels;
 using MipequeniaTienda.Models;
 using Newtonsoft.Json;
 using System.Security.Claims;
+using PayPalCheckoutSdk.Orders;
+using PayPalCheckoutSdk.Core;
+using PayPalHttp;
+using System.Globalization;
 
 namespace MipequeniaTienda.Controllers
 {
@@ -107,6 +111,173 @@ namespace MipequeniaTienda.Controllers
         {
             await Task.Run(() => Response.Cookies.Delete("carrito"));
         }
-      
+        // CAMBIAR CREDENCIALES
+        private readonly string clientId = "ASYdjILFb2T2F-yg903xBFeDdvFgp9xDfxhwIXTHD6kaaz5eVcEqKZWR7hsoYEddQnbn_A1XwsUDhSTc";
+        private readonly string clientSecret = "ED_RuNU8wp9zva_RD6cdy9EBQpVxlfAwoM-m1s6hKwGB4zlTmNA4HN2uYw3Ee9BuZv9aWaGqkK5AO2ZE"; //variable para pago
+
+        public IActionResult ProcederConCompra(decimal montoTotal, int direccionIdSeleccionada)
+        {
+            if (direccionIdSeleccionada > 0)
+            {
+                Response.Cookies.Append(
+                    "direccionseleccionada",
+                    direccionIdSeleccionada.ToString(),
+                    new CookieOptions { Expires = DateTimeOffset.Now.AddDays(1) }
+                );
+            }
+            else
+                return View("Index");
+
+            var request = new OrdersCreateRequest();
+            request.Prefer("return=representation");
+            request.RequestBody(BuildRequestBody(montoTotal));
+
+            var environment = new SandboxEnvironment(clientId, clientSecret);
+            var client = new PayPalHttpClient(environment);
+
+            try
+            {
+                var response = client.Execute(request).Result;
+                var statusCode = response.StatusCode;
+                var responseBody = response.Result<Order>();
+
+                var approveLink = responseBody.Links.FirstOrDefault(x => x.Rel == "approve");
+                if (approveLink != null)
+                    return Redirect(approveLink.Href);
+                else
+                    return RedirectToAction("Error");
+            }
+            catch (HttpException e)
+            {
+                return (IActionResult)e;
+            }
+        }
+
+        private OrderRequest BuildRequestBody(decimal montoTotal)
+        {
+            var baseUrl = $"{Request.Scheme}://{Request.Host}";
+
+            var request = new OrderRequest()
+            {
+                CheckoutPaymentIntent = "CAPTURE",
+                PurchaseUnits = new List<PurchaseUnitRequest>()
+                {
+                    new PurchaseUnitRequest()
+                    {
+                        AmountWithBreakdown = new AmountWithBreakdown()
+                        {
+                            CurrencyCode = "USD",
+                            Value = montoTotal.ToString("F2",CultureInfo.InvariantCulture)
+                        }
+                    }
+                },
+                ApplicationContext = new ApplicationContext()
+                {
+                    ReturnUrl = $"{baseUrl}/Carrito/PagoCompletado",
+                    CancelUrl = $"{baseUrl}/Carrito/Index"
+                }
+            };
+            return request;
+        }
+
+        public IActionResult PagoCompletado()
+        {
+            try
+            {
+                var carritoJson = Request.Cookies["carrito"];
+
+                int direccionId = 0;
+
+                if (
+                    Request.Cookies.TryGetValue("direccionseleccionada", out string? cookieValue)
+                    && int.TryParse(cookieValue, out int parseValue)
+                )
+                {
+                    direccionId = parseValue;
+                }
+
+                List<ProductoIdAndCantidad>? productoIdAndCantidads = !string.IsNullOrEmpty(
+                    carritoJson
+                )
+                    ? JsonConvert.DeserializeObject<List<ProductoIdAndCantidad>>(carritoJson)
+                    : null;
+
+                CarritoViewModel carritoViewModel = new();
+
+                if (productoIdAndCantidads != null)
+                {
+                    foreach (var item in productoIdAndCantidads)
+                    {
+                        var producto = _context.Productos.Find(item.ProductoId);
+                        if (producto != null)
+                        {
+                            carritoViewModel.Items.Add(
+                                new CarritoItemViewModel
+                                {
+                                    ProductoId = producto.ProductoId,
+                                    Nombre = producto.Nombre,
+                                    Precio = producto.Precio,
+                                    Cantidad = item.Cantidad
+                                }
+                            );
+                        }
+                    }
+                }
+
+                var usuarioId =
+                    User.Identity?.IsAuthenticated == true
+                        ? int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier))
+                        : 0;
+
+                carritoViewModel.Total = carritoViewModel.Items.Sum(i => i.Subtotal);
+                var pedido = new Pedido
+                {
+                    UsuarioId = usuarioId,
+                    Fecha = DateTime.UtcNow,
+                    Estado = "Vendido",
+                    DireccionIdSeleccionada = direccionId,
+                    Total = carritoViewModel.Total
+                };
+
+                _context.Pedidos.Add(pedido);
+                _context.SaveChanges();
+
+                foreach (var item in carritoViewModel.Items)
+                {
+                    var pedidoDetalle = new Detalle_Pedido
+                    {
+                        PedidoId = pedido.PedidoId,
+                        ProductoId = item.ProductoId,
+                        Cantidad = item.Cantidad,
+                        Precio = item.Precio
+                    };
+
+                    _context.DetallePedidos.Add(pedidoDetalle);
+
+                    var producto = _context.Productos.FirstOrDefault(
+                        p => p.ProductoId == item.ProductoId
+                    );
+
+                    if (producto != null)
+                        producto.Stock -= item.Cantidad;
+                }
+
+                _context.SaveChanges();
+
+                Response.Cookies.Delete("carrito");
+                Response.Cookies.Delete("direccionseleccionada");
+
+                ViewBag.DetallePedidos = _context.DetallePedidos
+                    .Where(dp => dp.PedidoId == pedido.PedidoId)
+                    .Include(dp => dp.Producto)
+                    .ToList();
+
+                return View("PagoCompletado", pedido);
+            }
+            catch (Exception e)
+            {
+                return HandleError(e);
+            }
+        }
     }
 }
